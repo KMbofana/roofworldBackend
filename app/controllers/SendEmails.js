@@ -281,7 +281,7 @@ const contactUs = async (req, res)=>{
     }catch(err){
         res.status(500).json({
             success: false,
-            message: "Failed to subscribe for news"
+            message: "Failed to send message"
         })
     }
 }
