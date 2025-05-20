@@ -105,7 +105,7 @@ function fileUploadHandler(field = 'file', options = {}) {
   };
 }
 
-const sendQuotationEmail =(req, res)=>{
+const sendQuotationEmail =async (req, res)=>{
 
     console.log(req.body)
     const transporter = nodemailer.createTransport({
@@ -119,20 +119,12 @@ const sendQuotationEmail =(req, res)=>{
       });
     
       // Wrap in an async IIFE so we can use await.
-    (async () => {
+
         const info = await transporter.sendMail({
           from: '"Anesu Mbofana" <anesumbofana@gmail.com>',
           to: "keithmbofana1@gmail.com, anesumbofana@gmail.com",
           subject: "Request For Quotation",
           text: "HTML Message", // plain‑text body
-          // attachments:[
-          //     {
-          //         filename: req.file.name,
-          //         // filename: req.files.name,
-          //         path: req.file.path,
-          //         cid: 'image1'
-          //     }
-          // ],
           html: `
           <!DOCTYPE html>
           <h><strong>CLIENT CONTACT INFORMATION</strong></h>
@@ -192,10 +184,10 @@ const sendQuotationEmail =(req, res)=>{
       
         console.log("Message sent:", info.messageId);
 
-      })();
+
 }
 
-const subscribeForNews = (req, res)=>{
+const subscribeForNews = async (req, res)=>{
 
    try{
        const transporter = nodemailer.createTransport({
@@ -209,7 +201,7 @@ const subscribeForNews = (req, res)=>{
        });
 
        // Wrap in an async IIFE so we can use await.
-       (async () => {
+
            const info = await transporter.sendMail({
                from: '"Anesu Mbofana" <anesumbofana@gmail.com>',
                to: "keithmbofana1@gmail.com, anesumbofana@gmail.com",
@@ -234,8 +226,6 @@ const subscribeForNews = (req, res)=>{
                message: "You have been subscribed for news"
            })
 
-       })();
-
 
    }catch(err){
        res.status(500).json({
@@ -245,8 +235,60 @@ const subscribeForNews = (req, res)=>{
    }
 }
 
+const contactUs = async (req, res)=>{
+
+    try{
+        const transporter = nodemailer.createTransport({
+            host: "sandbox.smtp.mailtrap.io",
+            port: 587,
+            secure: false, // true for 465, false for other ports
+            auth: {
+                user: "93404f068380b0",
+                pass: "141755245f84cd",
+            },
+        });
+
+
+
+        // Wrap in an async IIFE so we can use await.
+
+            const info = await transporter.sendMail({
+                from: '"Anesu Mbofana" <anesumbofana@gmail.com>',
+                to: "keithmbofana1@gmail.com, anesumbofana@gmail.com",
+                subject: req.body.subject,
+                text: "HTML Message",
+                html: `
+                  <!DOCTYPE html>
+                  <h><strong>CLIENT INFORMATION</strong></h>
+                    <p>First Name: <strong>${req.body.firstName}</strong></p>
+                    <p>Last Name: <strong>${req.body.lastName}</strong></p>
+                    <p>Email Address: <strong>${req.body.email}</strong></p>
+                    <p>Phone: <strong>${req.body.phone}</strong></p>
+                    <hr/>
+                    <h1><strong>Message:</strong></h1>
+                    <p>${req.body.message}</p>
+                  </html>`
+            });
+
+            console.log("Message sent:", info.messageId);
+
+            res.status(200).json({
+                success: true,
+                message: "thank you for contacting us, our team will get back to you shortly"
+            })
+
+
+    }catch(err){
+        res.status(500).json({
+            success: false,
+            message: "Failed to subscribe for news"
+        })
+    }
+}
+
 module.exports = {
     sendQuotationEmail,
     fileUploadHandler,
-    subscribeForNews
+    subscribeForNews,
+    contactUs
 }

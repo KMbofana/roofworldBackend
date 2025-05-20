@@ -11,5 +11,6 @@ router.post('/request_quotation',sendQuotation.fileUploadHandler("file"))
 
 router.post('/simple_calculator', projectCalculator.simpleCalculation)
 router.post('/subscribe_for_news', sendQuotation.subscribeForNews)
+router.post('/contact_us', sendQuotation.contactUs)
 
 module.exports = router
