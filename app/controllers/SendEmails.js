@@ -13,7 +13,7 @@ const upload = multer({storage});
 
 // Create a single function to handle file uploads
 function fileUploadHandler(field = 'file', options = {}) {
-  console.log("method started")
+
     // Parse options
   const {
     multiple  = false,
@@ -107,24 +107,37 @@ function fileUploadHandler(field = 'file', options = {}) {
 
 const sendQuotationEmail =async (req, res)=>{
 
-    console.log(req.body)
+
+    // console.log(req.file)
     const transporter = nodemailer.createTransport({
-        host: "sandbox.smtp.mailtrap.io",
-        port: 587,
-        secure: false, // true for 465, false for other ports
-        auth: {
-          user: "93404f068380b0",
-          pass: "141755245f84cd",
+        host: "smtp.roofworld.co.zw",
+        port: 465,
+        // secure: false, // upgrade later with STARTTLS
+        secure: "STARTTLS", // upgrade later with STARTTLS
+        tls: {
+            minVersion: "TLSv1.2",
+            rejectUnauthorized: false,
         },
-      });
+        auth: {
+          user: "info@roofworld.co.zw",
+          pass: "Mx9694196",
+        }
+    });
     
       // Wrap in an async IIFE so we can use await.
 
         const info = await transporter.sendMail({
-          from: '"Anesu Mbofana" <anesumbofana@gmail.com>',
-          to: "keithmbofana1@gmail.com, anesumbofana@gmail.com",
+          from: "info@roofworld.co.zw",
+          to: "info@roofworld.co.zw",
           subject: "Request For Quotation",
           text: "HTML Message", // plain‑text body
+            attachments: [
+                {
+                    filename: req.file.originalname,
+                    path: req.file.path
+
+                }
+            ],
           html: `
           <!DOCTYPE html>
           <h><strong>CLIENT CONTACT INFORMATION</strong></h>
@@ -191,20 +204,25 @@ const subscribeForNews = async (req, res)=>{
 
    try{
        const transporter = nodemailer.createTransport({
-           host: "sandbox.smtp.mailtrap.io",
-           port: 587,
-           secure: false, // true for 465, false for other ports
-           auth: {
-               user: "93404f068380b0",
-               pass: "141755245f84cd",
+           host: "smtp.roofworld.co.zw",
+           port: 465,
+           // secure: false, // upgrade later with STARTTLS
+           secure: "STARTTLS", // upgrade later with STARTTLS
+           tls: {
+               minVersion: "TLSv1.2",
+               rejectUnauthorized: false,
            },
+           auth: {
+               user: "info@roofworld.co.zw",
+               pass: "Mx9694196",
+           }
        });
 
        // Wrap in an async IIFE so we can use await.
 
            const info = await transporter.sendMail({
-               from: '"Anesu Mbofana" <anesumbofana@gmail.com>',
-               to: "keithmbofana1@gmail.com, anesumbofana@gmail.com",
+               from:"info@roofworld.co.zw",
+               to: "info@roofworld.co.zw",
                subject: "Request For Quotation",
                text: "HTML Message", // plain‑text body
                html: `
@@ -230,31 +248,37 @@ const subscribeForNews = async (req, res)=>{
    }catch(err){
        res.status(500).json({
            success: false,
-           message: "Failed to subscribe for news"
+           message: "Failed to subscribe for news",
+           error: err.message
        })
    }
 }
 
 const contactUs = async (req, res)=>{
-
+    console.log(req.body)
     try{
         const transporter = nodemailer.createTransport({
-            host: "sandbox.smtp.mailtrap.io",
-            port: 587,
-            secure: false, // true for 465, false for other ports
-            auth: {
-                user: "93404f068380b0",
-                pass: "141755245f84cd",
+            host: "smtp.roofworld.co.zw",
+            port: 465,
+            // secure: false, // upgrade later with STARTTLS
+            secure: "STARTTLS", // upgrade later with STARTTLS
+            tls: {
+                minVersion: "TLSv1.2",
+                rejectUnauthorized: false,
             },
+            auth: {
+                user: "info@roofworld.co.zw",
+                pass: "Mx9694196",
+            }
         });
 
-
+console.log(req.body)
 
         // Wrap in an async IIFE so we can use await.
 
             const info = await transporter.sendMail({
-                from: '"Anesu Mbofana" <anesumbofana@gmail.com>',
-                to: "keithmbofana1@gmail.com, anesumbofana@gmail.com",
+                from: "info@roofworld.co.zw",
+                to: "info@roofworld.co.zw",
                 subject: req.body.subject,
                 text: "HTML Message",
                 html: `
